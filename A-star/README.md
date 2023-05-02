@@ -25,7 +25,7 @@ O resultado será uma lista com o caminho mais curto entre as cidades, ou `None`
 
 Considere o mapa abaixo:
 
-![mapa](stes)
+![map](https://user-images.githubusercontent.com/65198889/235563683-4ef53eed-7810-4521-8c03-732911fabbd2.jpeg)
 
 Para encontrar o caminho mais curto entre as cidades `Arad` e `Bucharest`, basta chamar a função `A_star` passando os parâmetros adequados:
 
