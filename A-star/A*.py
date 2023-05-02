@@ -40,7 +40,7 @@ heuristic = {
     'Mehadia':       241,
     'Neamt':         234,
     'Oradea':        380,
-    'Pitesti':       98,
+    'Pitesti':       100,
     'Rimnicu Vicea': 193,
     'Sibiu':         253,
     'Timisoara':     329,
