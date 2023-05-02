@@ -7,7 +7,7 @@ Este repositório contém os projetos desenvolvidos por Kaio Guilherme na discip
 
 Os projetos são os seguintes:
 
-- Algoritimo A*: um exemplo de implementação do algoritmo A* (A-Star) em Python. O algoritmo é utilizado para encontrar o caminho mais curto entre dois pontos em um grafo ponderado.
+- [Algoritimo A*](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/tree/main/A-star): um exemplo de implementação do algoritmo A* (A-Star) em Python. O algoritmo é utilizado para encontrar o caminho mais curto entre dois pontos em um grafo ponderado.
 
 - <Outros projetos>
 
