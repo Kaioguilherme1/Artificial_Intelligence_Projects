@@ -119,6 +119,8 @@ fitness: 1
 
 ### Gráfico
 
+![Teste1_grafh](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/57ed32be-345f-4cec-a9d1-b7f2c3900831)
+
 Correção:
 
 ## Teste 2
@@ -142,6 +144,8 @@ fitness: 4
 Neste caso não foi possível gerar o tabuleiro devido ao tamanho do mesmo.
 
 ### Gráfico
+
+![Teste2_grafh](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/9c3c8098-5d55-4ff0-ab51-9152ee10b98d)
 
 ## Possíveis melhorias
 - O algoritmo poderia ser paralelizado para explorar mais eficientemente o espaço de soluções.
