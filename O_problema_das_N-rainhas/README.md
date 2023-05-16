@@ -14,6 +14,9 @@ função de fitness, que mede o quão boa é sua solução. Os indivíduos com m
 combinando seus genes para criar novos indivíduos. Ao longo do tempo, a população evolui em direção a soluções cada vez melhores.
 
 No caso desta implementação segue abaixo o esquema de funcionamento do algoritimo e a explicação de cada etapa
+## Esquema
+
+![Genetic_Diagram](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/a60f5220-9531-4b9c-809e-4bd0a08379b0)
 
 ### 1. Cromossomo: 
 O cromossomo é representado por um vetor de genes (um gene é uma posição no vetor). Neste código, o vetor é criado com base em um tamanho determinado,
