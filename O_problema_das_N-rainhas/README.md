@@ -15,6 +15,10 @@ combinando seus genes para criar novos indivíduos. Ao longo do tempo, a popula�
 
 No caso desta implementação segue abaixo o esquema de funcionamento do algoritimo e a explicação de cada etapa
 
+## Esquema:
+
+![Genetic_Diagram](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/2550b114-e564-4a27-9692-fea6e134fa69)
+
 ### 1. Cromossomo: 
 O cromossomo é representado por um vetor de genes (um gene é uma posição no vetor). Neste código, o vetor é criado com base em um tamanho determinado,
 como por exemplo este cromossomo [1, 2, 3, 4, 5, 6, 7, 8] que representa um tabuleiro 8x8 com 8 rainhas.
