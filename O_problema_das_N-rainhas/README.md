@@ -39,16 +39,17 @@ a função verifica se elas estão na mesma linha ou na mesma diagonal. Se as ra
 incrementa uma variável underscore. O valor retornado é a quantidade total de pares de rainhas que se atacam, 
 ou seja, o número de colisões entre as rainhas. Quanto menor o valor retornado, melhor é o desempenho do indivíduo na seleção natural.
 
-### 5. elitismo:
+
+### 6. reprodução:
+A seleção dos pais é realizada na função selection. Primeiramente, a população é ordenada pelo fitness de cada indivíduo. Em seguida, é selecionada uma proporção dos melhores indivíduos, definida pelo argumento best, que serão os pais da próxima geração. Um segundo pai é escolhido aleatoriamente da população atual. Esse processo é realizado para cada pai selecionado.
+
+### 6.1 elitismo:
 O elitismo neste algoritmo consiste em selecionar o melhor cromossomo da nova população e compará-lo com o melhor cromossomo encontrado até o momento.
 Se o fitness do novo cromossomo for melhor, ele é escolhido como o novo melhor cromossomo, caso contrário, o cromossomo anterior é mantido.
 
 Ou seja, mesmo que a seleção natural (seleção de pais, reprodução e mutação) possa produzir indivíduos mais aptos, o algoritmo garante que o melhor indivíduo encontrado até o momento não seja descartado e continue presente garantindo assim que o mais apto nunca seja perdido. Isso aumenta as chances do algoritmo convergir para uma solução ótima ou próxima do ótimo.
 
-### 6. reprodução:
-A seleção dos pais é realizada na função selection. Primeiramente, a população é ordenada pelo fitness de cada indivíduo. Em seguida, é selecionada uma proporção dos melhores indivíduos, definida pelo argumento best, que serão os pais da próxima geração. Um segundo pai é escolhido aleatoriamente da população atual. Esse processo é realizado para cada pai selecionado.
-
-### 6.1 crossover:
+### 6.2 crossover:
 A função crossover recebe dois pais (parent1 e parent2) que são representados por listas, e um parâmetro que define quantos filhos serão gerados (num_offspring).
 
 O objetivo dessa função é criar um ou mais filhos a partir da combinação dos genes dos pais. Para isso, é selecionado um ponto de crossover aleatório entre as duas listas que representam os pais. Esse ponto de crossover é onde os genes dos pais serão divididos, e os filhos serão gerados a partir dessa divisão.
@@ -57,7 +58,7 @@ A partir do ponto de crossover, os genes do parent1 são colocados em uma lista,
 
 Ao final, a função retorna uma lista com os filhos gerados pelo crossover.
 
-### 6.2 mutação:
+### 6.3 mutação:
 A função mutation é responsável por realizar mutações aleatórias em um cromossomo. Ela recebe um cromossomo (representado por uma lista) e uma probabilidade de mutação (valor padrão: 0.001).
 
 A função percorre cada gene do cromossomo e verifica se deve haver uma mutação nesse gene, utilizando a probabilidade de mutação passada como argumento. Se o número gerado aleatoriamente for menor que a probabilidade de mutação, o gene é substituído por um novo valor aleatório (gerado utilizando a função random.randint()).
