@@ -1,5 +1,5 @@
 # O problema das N rainhas
-
+---
 Este é um projeto desenvolvido para a disciplina de Inteligência Artificial do curso de Ciência da Computação da UFRR. O objetivo é solucionar o problema das oito rainhas usando algoritmos genéticos.
 
 ## Requisitos
@@ -14,6 +14,9 @@ função de fitness, que mede o quão boa é sua solução. Os indivíduos com m
 combinando seus genes para criar novos indivíduos. Ao longo do tempo, a população evolui em direção a soluções cada vez melhores.
 
 No caso desta implementação segue abaixo o esquema de funcionamento do algoritimo e a explicação de cada etapa
+## Esquema
+
+![Genetic_Diagram](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/a60f5220-9531-4b9c-809e-4bd0a08379b0)
 
 ### 1. Cromossomo: 
 O cromossomo é representado por um vetor de genes (um gene é uma posição no vetor). Neste código, o vetor é criado com base em um tamanho determinado,
@@ -120,7 +123,7 @@ fitness: 1
 
 ### Gráfico
 
-Correção:
+![Teste1_grafh](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/9256b2a7-f078-4501-9c31-b22f54a74a3b)
 
 ## Teste 2
 
@@ -143,6 +146,9 @@ fitness: 4
 Neste caso não foi possível gerar o tabuleiro devido ao tamanho do mesmo.
 
 ### Gráfico
+---
+![Teste2_grafh](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/eae47e66-eda1-4dec-a55d-55adb96c8620)
+---
 
 ## Possíveis melhorias
 - O algoritmo poderia ser paralelizado para explorar mais eficientemente o espaço de soluções.
