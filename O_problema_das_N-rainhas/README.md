@@ -146,6 +146,6 @@ Neste caso não foi possível gerar o tabuleiro devido ao tamanho do mesmo.
 
 ## Possíveis melhorias
 - O algoritmo poderia ser paralelizado para explorar mais eficientemente o espaço de soluções.
-
+- 
 ## Autor
 Este projeto foi desenvolvido por Kaio Guilherme como parte da disciplina de Inteligência Artificial do curso de Ciência da Computação da UFRR.
