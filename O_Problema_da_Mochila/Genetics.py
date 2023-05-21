@@ -1,17 +1,17 @@
-from joblib import Parallel, delayed
-import multiprocessing
+# auth kaio Guilherme
+
 import random
-import threading
-import concurrent.futures
 from typing import Callable
 from matplotlib import pyplot as plt
-
+import time
 
 class Genetic:
-
     def __init__(self, chromosome_size: int, fitness_function: Callable, fitness_minimize: bool = False,
                  population_size: int = 10,
-                 generations: int = 10, best=0.5, mutation_prob=0.001):
+                 generations: int = 10,
+                 best: float = 0.5,
+                 mutation_prob: float = 0.001,
+                 selection_prob: float = 0.001):
         """
         Esta função implementa um algoritmo genético para otimização de problemas de maximização.
 
@@ -23,6 +23,7 @@ class Genetic:
             generations (int): O número de gerações que serão executadas.
             best (float): A proporção de melhores indivíduos que serão selecionados para reprodução.
             mutation_prob (float): A taxa de mutação que será aplicada aos indivíduos selecionados para reprodução.
+            selection_prob (float): A porcentagem de influência do rank na seleção do segundo pai.
 
         """
         self.chromosome_size = chromosome_size
@@ -36,6 +37,14 @@ class Genetic:
         self.results = []
         self.best_chromosome = None
         self.offsprings_list = []
+        self.performace = [["crossover", 0 , 0.0 , 0.0],
+                            ["mutation", 0 , 0.0 , 0.0],
+                            ["selection", 0 , 0.0 , 0.0],
+                            ["Cruzamento", 0 , 0.0 , 0.0],
+                            0]
+        probabilities = [selection_prob] + [selection_prob * (1 - i / (population_size - 1)) for i in range(1, population_size)]
+        self.probabilities = probabilities
+
 
     @staticmethod
     def plot_graphic(results: list, title: str):
@@ -62,6 +71,18 @@ class Genetic:
 
         fig.suptitle(title)
         plt.show()
+    @staticmethod
+    def print_performace(performance: list):
+        print("+-------------+--------------+-----------------+----------------+")
+        print("| função      | N° execuções | tempo Média(s)  | Tempo total(s) |")
+        print("+-------------+--------------+-----------------+----------------+")
+        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[0][0], performance[0][1], performance[0][2],performance[0][3]))
+        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[1][0], performance[1][1], performance[1][2],performance[1][3]))
+        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[2][0], performance[2][1], performance[2][2],performance[2][3]))
+        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[3][0], performance[3][1], performance[3][2],performance[3][3]))
+        print("+-------------+--------------+-----------------+----------------+")
+        print("| Tempo total de execução: {:.4f} S                             |".format(performance[4]))
+        print("+---------------------------------------------------------------+")
 
     def _generate_population(self):
         """
@@ -84,8 +105,7 @@ class Genetic:
             population.append(chromosome)
         return population
 
-    @staticmethod
-    def crossover(parent1: list, parent2: list, num_offspring: int = 1) -> list:
+    def crossover(self, parent1: list, parent2: list, num_offspring: int = 1) -> list:
         """
         Realiza o crossover entre dois pais para gerar um ou mais filhos.
 
@@ -100,6 +120,7 @@ class Genetic:
         O número de filhos gerados é determinado pelo argumento `num_offspring`.
         O ponto de crossover é selecionado aleatoriamente entre os pais.
         """
+        stat = time.perf_counter()
         offspring = []
 
         for i in range(num_offspring):
@@ -107,6 +128,9 @@ class Genetic:
             child = parent1[:crossover_point] + parent2[crossover_point:]  # combina os genes dos pais
             offspring.append(child)
 
+        end = time.perf_counter()
+        self.performace[0][1] += 1 #quantidade
+        self.performace[0][3] += (end - stat) #tempo
         return offspring
 
     def mutation(self, chromosome: list):
@@ -115,9 +139,13 @@ class Genetic:
         :param chromosome:
         :return:
         """
+        stat = time.perf_counter()
         for i in range(len(chromosome)):
             if random.random() < self.mutation_prob:
                 chromosome[i] = random.randint(0, len(chromosome) - 1)
+        end = time.perf_counter()
+        self.performace[1][1] += 1 #quantidade
+        self.performace[1][3] += (end - stat) #tempo
         return chromosome
 
     def _selection(self, population: list, best: float) -> list:
@@ -132,18 +160,29 @@ class Genetic:
         Retorna uma lista contendo os melhores indivíduos, ordenados pelo seu fitness (aptidão).
         A quantidade de indivíduos selecionados é determinada pela proporção definida pelo argumento `best`.
         """
-
+        stat = time.perf_counter()
         if self.fitness_minimize:
             selected = sorted(population, key=self.fitness_function)[:int(len(population) * best)]
         else:
             selected = sorted(population, key=self.fitness_function, reverse=True)[:int(len(population) * best)]
+        end = time.perf_counter()
+        self.performace[2][1] += 1 #quantidade
+        self.performace[2][3] += (end - stat) #tempo
         return selected
 
     def _cruzamento(self, population: list, num_offspring: int = 2, best: float = 1) -> list:
+        """
+        Realiza o cruzamento entre os indivíduos da população.
+        :param population: elementos da população
+        :param num_offspring: numero de filhos a serem gerados
+        :param best: proporção de indivíduos a serem selecionados
+        :return:
+        """
+        start = time.perf_counter()
         new_population = []
         # Seleção dos pais para cruzamento
-        for parent1 in self._selection(population, best):
-            parent2 = random.choice(population)
+        for parent1 in self._selection(population, best): # seleciona pelo metodo de ranking
+            parent2 = random.choices(population, weights=self.probabilities)[0] # seleciona pelo metodo de roleta Viciada a partir do ranking
 
             # Reprodução
             offspring = self.crossover(parent1, parent2, num_offspring)
@@ -152,60 +191,35 @@ class Genetic:
             for child in offspring:
                 mutated_child = self.mutation(child)
                 new_population.append(mutated_child)
-
+        end = time.perf_counter()
+        self.performace[3][1] += 1 #quantidade
+        self.performace[3][3] += (end - start) #tempo
         return new_population
 
-    def _cruzamento_thread(self, population: list, num_offspring: int):
-        new_population = self._cruzamento(population, num_offspring)
-        self.offsprings_list.append(new_population)
+    def run(self) -> list:
+        """
+            Executa o algoritmo genético.
 
-    def _split_list(self, list: list, n: int)-> list:
-        size = len(list) // n
-        remainder = len(list) % n
-        result = []
-        index = 0
-        for _ in range(n):
-            sublist_size = size + (1 if remainder > 0 else 0)
-            result.append(list[index:index + sublist_size])
-            index += sublist_size
-            remainder -= 1
-        return result
-
-    def run_te(self, multithread: bool = False) -> list: # Tentativa de implementação paralela
+            :return: Uma lista contendo os resultados das gerações e informações de desempenho.
+                A lista contém os seguintes elementos:
+                    * results: Uma lista com informações das gerações. Cada elemento é uma lista com:
+                        - O número da geração.
+                        - O cromossomo atualmente mais apto e sua avaliação de aptidão.
+                        - O melhor cromossomo encontrado até o momento e sua avaliação de aptidão.
+                    - performance: Uma lista com informações de desempenho do algoritmo genético. Contém:
+                        - performace_crossover: Nome , quantidade de vezes, tempo de execução medio, tempo total
+                        - performace_mutation: Nome , quantidade de vezes, tempo de execução medio, tempo total
+                        - performace_selection: Nome , quantidade de vezes, tempo de execução medio, tempo total
+                        - performace_cruzamento: Nome , quantidade de vezes, tempo de execução medio, tempo total
+            """
+        stat = time.perf_counter()
         population = self._generate_population()
         best_chromosome = population[0]
         num_offspring = int(self.population_size // (self.population_size * self.best))
         results = []
-
-        lock = threading.Lock()
-
-        manager = multiprocessing.Manager()
-        offsprings_list = manager.list()
-
-        def process_parents(parents, num_offspring, offsprings_list):
-            offsprings = self._cruzamento(parents, num_offspring)
-            offsprings_list.append(offsprings)
-
         for generation in range(self.generations):
-            new_population = []
 
-            if multithread:
-                processes = []
-                num_processes = 10
-                parents_list = self._split_list(population, num_processes)
-                for parents in parents_list:
-                    p = multiprocessing.Process(target=process_parents, args=(parents, num_offspring, offsprings_list))
-                    processes.append(p)
-                    p.start()
-
-                for process in processes:
-                    process.join()
-
-                for offsprings in offsprings_list:
-                    new_population.extend(offsprings)
-
-            else:
-                new_population = self._cruzamento(population, num_offspring, self.best)
+            new_population = self._cruzamento(population, num_offspring, self.best)
 
             # Avaliação do melhor cromossomo da nova população
             current_best_chromosome = self._selection(new_population, 1)[0]
@@ -227,84 +241,12 @@ class Genetic:
 
             # Atualização da população
             population = new_population
-
+        end = time.perf_counter()
+        # Calculo de desempenho
+        self.performace[0][2] = self.performace[0][3] / self.performace[0][1]
+        self.performace[1][2] = self.performace[1][3] / self.performace[1][1]
+        self.performace[2][2] = self.performace[2][3] / self.performace[2][1]
+        self.performace[3][2] = self.performace[3][3] / self.performace[3][1]
+        self.performace[4] = (end - stat)
         self.results = results
-        return results
-
-    def run(self, multithread: bool = False) -> list:
-        population = self._generate_population()
-        best_chromosome = population[0]
-        num_offspring = int(self.population_size // (self.population_size * self.best))
-        results = []
-
-        def process_parents(parents):
-            offsprings = self._cruzamento(parents, num_offspring)
-            return offsprings
-
-        for generation in range(self.generations):
-            new_population = []
-
-            if multithread:
-                num_processes = 10
-                parents_list = self._split_list(population, num_processes)
-
-                offsprings_list = Parallel(n_jobs=-1)(delayed(process_parents)(parents) for parents in parents_list)
-
-                for offsprings in offsprings_list:
-                    new_population.extend(offsprings)
-
-            else:
-                new_population = self._cruzamento(population, num_offspring, self.best)
-
-            # Avaliação do melhor cromossomo da nova população
-            current_best_chromosome = self._selection(new_population, 1)[0]
-
-            # Atualização do melhor cromossomo encontrado
-            if self.fitness_minimize:
-                if self.fitness_function(current_best_chromosome) < self.fitness_function(best_chromosome):
-                    best_chromosome = current_best_chromosome
-            else:
-                if self.fitness_function(current_best_chromosome) > self.fitness_function(best_chromosome):
-                    best_chromosome = current_best_chromosome
-
-            # Adição dos resultados da geração atual à lista de resultados
-            results.append([
-                generation,
-                [current_best_chromosome, self.fitness_function(current_best_chromosome)],
-                [best_chromosome, self.fitness_function(best_chromosome)]
-            ])
-
-            # Atualização da população
-            population = new_population
-
-        self.results = results
-        return results
-
-def fitness(chromosome: list):
-    """
-    Retorna o numero de colições que ocorreram entre as rainhas
-    :param chromosome:
-    :return:
-    """
-    # retorna o número de pares de rainhas que se atacam, logo quanto menor o valor, melhor
-    underscore = 0
-    length = len(chromosome)
-    for i in range(0, length - 1):
-        for j in range(i + 1,
-                       length):  # alterei o range para evitar contar a colisão de uma rainha com ela mesma e remover
-            # duplicidades
-            if chromosome[i] == chromosome[j]:
-                underscore += 1
-
-            # print(chromosome[i], chromosome[j], i, j)
-            if abs(chromosome[i] - chromosome[j]) == abs(i - j):
-                underscore += 1
-
-    return underscore
-
-
-
-pop = Genetic(chromosome_size=100, population_size=1000, fitness_minimize=True, generations=1000,
-              fitness_function=fitness)
-results = pop.run(multithread=False)
-pop.plot_graphic(results, title="8 Queens")
+        return [results , self.performace]

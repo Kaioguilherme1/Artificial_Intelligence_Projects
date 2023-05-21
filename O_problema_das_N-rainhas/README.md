@@ -1,13 +1,23 @@
-# O problema das N rainhas
+# 👑 O problema das N rainhas
 ---
 Este é um projeto desenvolvido para a disciplina de Inteligência Artificial do curso de Ciência da Computação da UFRR. O objetivo é solucionar o problema das oito rainhas usando algoritmos genéticos.
 
-## Requisitos
+## Índice
+1. [👑 O problema das N rainhas ](#o-problema-das-n-rainhas)
+2. [⚙️ Requisitos](#requisitos)
+3. [🔄 Como funciona](#-como-funciona)
+4. [Esquema](#esquema)
+5. [🖥️ Uso](#uso)
+6. [🧪 Exemplos de teste](#exemplos-de-teste)
+7. [💡 Possíveis melhorias](#possíveis-melhorias)
+8. [‍💻 Autor](#autor)
+
+## ⚙️ Requisitos
 - Python 3.x
 - matplotlib
 
-## Como funciona
-Este projeto implementa um algoritmo genético para resolver o problema das N rainhas. O objetivo é encontrar um arranjo de N rainhas em um tabuleiro NxN que não se atacam (não existem duas rainhas na mesma linha, coluna ou diagonal).
+## 🔄 Como funciona
+Este projeto implenta um algoritmo genético para resolver o problema das N rainhas. O objetivo é encontrar um arranjo de N rainhas em um tabuleiro NxN que não se atacam (não existem duas rainhas na mesma linha, coluna ou diagonal).
 
 O algoritmo genético é uma técnica de busca baseada na seleção natural. A ideia é iniciar com uma população aleatória de indivíduos, cada um representando uma possível solução para o problema. Esses indivíduos são então avaliados por uma 
 função de fitness, que mede o quão boa é sua solução. Os indivíduos com melhor fitness têm uma maior chance de sobreviver e se reproduzir, 
@@ -69,7 +79,7 @@ A função percorre cada gene do cromossomo e verifica se deve haver uma mutaç�
 Essa função é importante para adicionar variação genética à população, evitando que o algoritmo genético fique preso em mínimos locais e permitindo que novas soluções sejam descobertas durante o processo de evolução
 
 
-## Uso
+## 🖥️ Uso
 
 Para otimizar problemas de maximização com a função Genetic_N_QUEENS, basta seguir os seguintes passos:
 
@@ -84,7 +94,7 @@ Chame a função Genetic_N_QUEENS, passando os seguintes parâmetros:
 
 O melhor indivíduo encontrado pela função Genetic_N_QUEENS será uma lista representando a posição de cada rainha no tabuleiro, de forma que duas rainhas não se ataquem. O objetivo é maximizar o número de rainhas que podem ser posicionadas no tabuleiro sem se atacarem.
 
-## Exemplos de teste
+## 🧪 Exemplos de teste
 
 ## Teste 1
 
@@ -150,7 +160,7 @@ Neste caso não foi possível gerar o tabuleiro devido ao tamanho do mesmo.
 ![Teste2_grafh](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/eae47e66-eda1-4dec-a55d-55adb96c8620)
 ---
 
-## Possíveis melhorias
+## 💡 Possíveis melhorias
 - O algoritmo poderia ser paralelizado para explorar mais eficientemente o espaço de soluções.
 - 
 ## Autor
