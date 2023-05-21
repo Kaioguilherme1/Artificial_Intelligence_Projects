@@ -115,9 +115,11 @@ este teste foi executado com os seguintes parâmetros:
 
 como podemos observear no trecho do codigo baixo:
 
-
+![code_test1](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/bf937f40-c06b-4c38-a27f-5830a44c41c7)
 
 #### Grafico
+
+![Teste1_graph](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/c6ff5468-915a-4b00-92c4-5d8ea9925823)
 
 ### Resultados
 
@@ -163,9 +165,11 @@ este teste foi executado com os seguintes parâmetros:
 
 como podemos observear no trecho do codigo baixo:
 
+![code_test2](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/cdab44f7-af71-4720-a209-3d3c166f4984)
+
 ### Grafico
 
-
+![Teste2_graph](https://github.com/Kaioguilherme1/Artificial_Intelligence_Projects/assets/65198889/7805faf0-8338-4ffe-a51b-56af6f01374b)
 
 ### Resultados
 
