@@ -79,9 +79,9 @@ passando o cromossomo e o valor de aptidão do melhor indivíduo encontrado. Al�
 
 Após a execução do algoritmo genético, serão exibidos os seguintes resultados:
 
-- O melhor resultado encontrado, mostrando o cromossomo (quantidade de cada item na mochila), o valor de aptidão e a quantidade total de peso e valor da mochila.
+- O melhor resultado encontrado, mostrando o cromossomo (quantidade de cada item na mochila), o valor de aptidão.
 
-- O desempenho do algoritmo, que pode incluir informações como a média, mediana e desvio padrão dos valores de aptidão ao longo das gerações.
+- O desempenho do algoritmo, que pode incluir informações como a média é tempo total de execução das funções.
 
 - Um gráfico da evolução do algoritmo, mostrando como o valor de aptidão melhora ao longo das gerações.
 
