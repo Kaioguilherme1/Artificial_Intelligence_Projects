@@ -72,8 +72,8 @@ def fitness(chromosome: list):
 # ---------------------------- Execução ---------------------------- #
 
 Population = Genetic(chromosome_size=len(items),
-                     population_size=5000,
-                     generations=1000,
+                     population_size=1000,
+                     generations=50,
                      best=0.5,
                      mutation_prob=0.001,
                      fitness_function=fitness,)

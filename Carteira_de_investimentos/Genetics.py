@@ -1,15 +1,20 @@
 # auth kaio Guilherme
-# version 1.0
+# version 2.0
 
 import random
 from typing import Callable
 from matplotlib import pyplot as plt
 import time
 
+
 class Genetic:
-    def __init__(self, chromosome_size: int, fitness_function: Callable, fitness_minimize: bool = False,
+    def __init__(self, chromosome_size: int,
+                 genes_number: int,
+                 fitness_function: Callable,
+                 fitness_minimize: bool = False,
                  population_size: int = 10,
                  generations: int = 10,
+                 num_elites: int = 0,
                  best: float = 0.5,
                  mutation_prob: float = 0.001,
                  selection_prob: float = 0.001):
@@ -18,10 +23,12 @@ class Genetic:
 
         Args:
             chromosome_size (int): O número de dimensões do espaço de busca.
+            genes_number (int): possiveis valores que o gene pode ter a partir de 0.
             fitness_function (Callable): A função de avaliação que será utilizada para avaliar os indivíduos.
             fitness_minimize (bool): Se a função de avaliação deve ser minimizada ou maximizada.
             population_size (int): O tamanho da população a ser gerada.
             generations (int): O número de gerações que serão executadas.
+            num_elites (int): O número de indivíduos que serão mantidos de uma geração para a próxima.
             best (float): A proporção de melhores indivíduos que serão selecionados para reprodução.
             mutation_prob (float): A taxa de mutação que será aplicada aos indivíduos selecionados para reprodução.
             selection_prob (float): A porcentagem de influência do rank na seleção do segundo pai.
@@ -29,7 +36,9 @@ class Genetic:
         """
         self.chromosome_size = chromosome_size
         self.population_size = population_size
+        self.genes_number = genes_number
         self.generations = generations
+        self.num_elites = num_elites
         self.fitness_function = fitness_function
         self.fitness_minimize = fitness_minimize
         self.best = best
@@ -38,12 +47,17 @@ class Genetic:
         self.results = []
         self.best_chromosome = None
         self.offsprings_list = []
-        self.performace = [["crossover", 0 , 0.0 , 0.0],
-                            ["mutation", 0 , 0.0 , 0.0],
-                            ["selection", 0 , 0.0 , 0.0],
-                            ["Cruzamento", 0 , 0.0 , 0.0],
-                            0]
-        probabilities = [selection_prob] + [selection_prob * (1 - i / (population_size - 1)) for i in range(1, population_size)]
+        self.performace = [["crossover", 0, 0.0, 0.0],
+                           ["mutation", 0, 0.0, 0.0],
+                           ["selection", 0, 0.0, 0.0],
+                           ["Cruzamento", 0, 0.0, 0.0],
+                           0]
+
+        probabilities = [selection_prob] + [selection_prob * (1 - i / ((population_size * best) - 1)) for i in
+                                            range(1, int(population_size * best))]
+
+        print(probabilities)
+        print(len(probabilities))
         self.probabilities = probabilities
 
 
@@ -57,30 +71,30 @@ class Genetic:
             bests_alltime.append(result[2][1])
             bests_generation.append(result[1][1])
 
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
-        ax1.plot(geration, bests_generation)
-        ax1.set_xlabel('Geração')
-        ax1.set_ylabel('Melhor fitness')
-        ax1.set_title('Melhor fitness por geração')
-        ax1.grid(True)
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(geration, bests_generation, color='red', label='Melhor fitness por geração')
+        ax.plot(geration, bests_alltime, color='blue', label='Melhor fitness de todas as gerações')
+        ax.set_xlabel('Geração')
+        ax.set_ylabel('Melhor fitness')
+        ax.set_title(title)
+        ax.grid(True)
+        ax.legend()
 
-        ax2.plot(geration, bests_alltime)
-        ax2.set_xlabel('Geração')
-        ax2.set_ylabel('Melhor fitness')
-        ax2.set_title('Melhor fitness de todas as gerações')
-        ax2.grid(True)
-
-        fig.suptitle(title)
         plt.show()
+
     @staticmethod
     def print_performace(performance: list):
         print("+-------------+--------------+-----------------+----------------+")
         print("| função      | N° execuções | tempo Média(s)  | Tempo total(s) |")
         print("+-------------+--------------+-----------------+----------------+")
-        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[0][0], performance[0][1], performance[0][2],performance[0][3]))
-        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[1][0], performance[1][1], performance[1][2],performance[1][3]))
-        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[2][0], performance[2][1], performance[2][2],performance[2][3]))
-        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[3][0], performance[3][1], performance[3][2],performance[3][3]))
+        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[0][0], performance[0][1],
+                                                                        performance[0][2], performance[0][3]))
+        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[1][0], performance[1][1],
+                                                                        performance[1][2], performance[1][3]))
+        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[2][0], performance[2][1],
+                                                                        performance[2][2], performance[2][3]))
+        print("| {:<12}| {:<13}| {:.8f}      | {:.4f} S       |".format(performance[3][0], performance[3][1],
+                                                                        performance[3][2], performance[3][3]))
         print("+-------------+--------------+-----------------+----------------+")
         print("| Tempo total de execução: {:.4f} S                             |".format(performance[4]))
         print("+---------------------------------------------------------------+")
@@ -102,7 +116,7 @@ class Genetic:
         for _ in range(self.population_size):
             chromosome = []
             for _ in range(self.chromosome_size):
-                chromosome.append(random.randint(0, self.chromosome_size - 1))
+                chromosome.append(random.randint(0, self.genes_number - 1))
             population.append(chromosome)
         return population
 
@@ -130,8 +144,8 @@ class Genetic:
             offspring.append(child)
 
         end = time.perf_counter()
-        self.performace[0][1] += 1 #quantidade
-        self.performace[0][3] += (end - stat) #tempo
+        self.performace[0][1] += 1  # quantidade
+        self.performace[0][3] += (end - stat)  # tempo
         return offspring
 
     def mutation(self, chromosome: list):
@@ -143,10 +157,10 @@ class Genetic:
         stat = time.perf_counter()
         for i in range(len(chromosome)):
             if random.random() < self.mutation_prob:
-                chromosome[i] = random.randint(0, len(chromosome) - 1)
+                chromosome[i] = random.randint(0, self.genes_number - 1)
         end = time.perf_counter()
-        self.performace[1][1] += 1 #quantidade
-        self.performace[1][3] += (end - stat) #tempo
+        self.performace[1][1] += 1  # quantidade
+        self.performace[1][3] += (end - stat)  # tempo
         return chromosome
 
     def _selection(self, population: list, best: float) -> list:
@@ -167,9 +181,27 @@ class Genetic:
         else:
             selected = sorted(population, key=self.fitness_function, reverse=True)[:int(len(population) * best)]
         end = time.perf_counter()
-        self.performace[2][1] += 1 #quantidade
-        self.performace[2][3] += (end - stat) #tempo
+        self.performace[2][1] += 1  # quantidade
+        self.performace[2][3] += (end - stat)  # tempo
         return selected
+
+    def _elitism(self, population: list, new_population: list) -> list:
+        """
+        Aplica o elitismo para selecionar os melhores indivíduos das populações antiga e nova com base no numero de elites que vão permancer.
+
+        Args:
+            population (list): População antiga.
+            new_population (list): Nova população.
+
+        Returns:
+            list: Nova população com os melhores indivíduos selecionados num_elites.
+
+        """
+        if self.num_elites > 0:
+            best_list = population[:self.num_elites] + new_population[:self.num_elites]
+            selected = self._selection(best_list, 0.5)
+            new_population[:self.num_elites] = selected
+        return new_population
 
     def _cruzamento(self, population: list, num_offspring: int = 2, best: float = 1) -> list:
         """
@@ -181,9 +213,10 @@ class Genetic:
         """
         start = time.perf_counter()
         new_population = []
+        population = self._selection(population, best)  # seleciona pelo metodo de ranking
         # Seleção dos pais para cruzamento
-        for parent1 in self._selection(population, best): # seleciona pelo metodo de ranking
-            parent2 = random.choices(population, weights=self.probabilities)[0] # seleciona pelo metodo de roleta Viciada a partir do ranking
+        for parent1 in population:
+            parent2 = random.choices(population, weights=self.probabilities)[0]  # seleciona pelo metodo de roleta Viciada a partir do ranking
 
             # Reprodução
             offspring = self.crossover(parent1, parent2, num_offspring)
@@ -192,9 +225,10 @@ class Genetic:
             for child in offspring:
                 mutated_child = self.mutation(child)
                 new_population.append(mutated_child)
+
         end = time.perf_counter()
-        self.performace[3][1] += 1 #quantidade
-        self.performace[3][3] += (end - start) #tempo
+        self.performace[3][1] += 1  # quantidade
+        self.performace[3][3] += (end - start)  # tempo
         return new_population
 
     def run(self) -> list:
@@ -222,8 +256,11 @@ class Genetic:
 
             new_population = self._cruzamento(population, num_offspring, self.best)
 
+            # Seleção dos indivíduos mais aptos da nova população
+            new_population = self._selection(new_population, 1)
+
             # Avaliação do melhor cromossomo da nova população
-            current_best_chromosome = self._selection(new_population, 1)[0]
+            current_best_chromosome = new_population[0]
 
             # Atualização do melhor cromossomo encontrado
             if self.fitness_minimize:
@@ -232,6 +269,9 @@ class Genetic:
             else:
                 if self.fitness_function(current_best_chromosome) > self.fitness_function(best_chromosome):
                     best_chromosome = current_best_chromosome
+
+            # Aplicação do elitismo
+            new_population = self._elitism(population, new_population)
 
             # Adição dos resultados da geração atual à lista de resultados
             results.append([
@@ -250,4 +290,4 @@ class Genetic:
         self.performace[3][2] = self.performace[3][3] / self.performace[3][1]
         self.performace[4] = (end - stat)
         self.results = results
-        return [results , self.performace]
+        return [results, self.performace]
