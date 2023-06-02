@@ -56,8 +56,6 @@ class Genetic:
         probabilities = [selection_prob] + [selection_prob * (1 - i / ((population_size * best) - 1)) for i in
                                             range(1, int(population_size * best))]
 
-        print(probabilities)
-        print(len(probabilities))
         self.probabilities = probabilities
 
 
@@ -291,3 +289,4 @@ class Genetic:
         self.performace[4] = (end - stat)
         self.results = results
         return [results, self.performace]
+
