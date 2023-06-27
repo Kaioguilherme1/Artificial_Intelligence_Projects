@@ -1,10 +1,13 @@
 # auth kaio Guilherme
-# version 2.0
+# version 3.0
 
 import random
 from typing import Callable
+import numpy as np
 from matplotlib import pyplot as plt
 import time
+
+from matplotlib.animation import FuncAnimation
 
 
 class Genetic:
@@ -64,20 +67,22 @@ class Genetic:
         geration = []
         bests_alltime = []
         bests_generation = []
+        score_median = []
         for result in results:
             geration.append(result[0])
             bests_alltime.append(result[2][1])
             bests_generation.append(result[1][1])
+            score_median.append(result[3])
 
         fig, ax = plt.subplots(figsize=(10, 5))
-        ax.plot(geration, bests_generation, color='red', label='Melhor fitness por geração')
+        ax.plot(geration, bests_generation, color='green', label='Melhor fitness por geração')
         ax.plot(geration, bests_alltime, color='blue', label='Melhor fitness de todas as gerações')
+        ax.plot(geration, score_median, color='red', label='Mediana fitness de todas as gerações')
         ax.set_xlabel('Geração')
         ax.set_ylabel('Melhor fitness')
         ax.set_title(title)
         ax.grid(True)
         ax.legend()
-
         plt.show()
 
     @staticmethod
@@ -250,6 +255,7 @@ class Genetic:
         best_chromosome = population[0]
         num_offspring = int(self.population_size // (self.population_size * self.best))
         results = []
+
         for generation in range(self.generations):
 
             new_population = self._cruzamento(population, num_offspring, self.best)
@@ -271,12 +277,20 @@ class Genetic:
             # Aplicação do elitismo
             new_population = self._elitism(population, new_population)
 
+            # coleta o mediano
+            score_median = np.mean([self.fitness_function(i) for i in new_population])
+
             # Adição dos resultados da geração atual à lista de resultados
             results.append([
                 generation,
                 [current_best_chromosome, self.fitness_function(current_best_chromosome)],
-                [best_chromosome, self.fitness_function(best_chromosome)]
+                [best_chromosome, self.fitness_function(best_chromosome)],
+                score_median
+
             ])
+            if self.fitness_minimize:
+                if self.fitness_function(best_chromosome) == 0:
+                    break
 
             # Atualização da população
             population = new_population
