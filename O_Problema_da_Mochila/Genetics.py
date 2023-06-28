@@ -7,7 +7,9 @@ from matplotlib import pyplot as plt
 import time
 
 class Genetic:
-    def __init__(self, chromosome_size: int, fitness_function: Callable, fitness_minimize: bool = False,
+    def __init__(self, chromosome_size: int,
+                 fitness_function: Callable,
+                 fitness_minimize: bool = False,
                  population_size: int = 10,
                  generations: int = 10,
                  best: float = 0.5,

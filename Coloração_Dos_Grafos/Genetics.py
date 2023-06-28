@@ -57,7 +57,7 @@ class Genetic:
                            0]
 
         probabilities = [selection_prob] + [selection_prob * (1 - i / ((population_size * best) - 1)) for i in
-                                            range(1, int(population_size * best))]
+                                            range(1, int(population_size * best))] # probabilidade de seleção de cada individuo
 
         self.probabilities = probabilities
 
@@ -84,6 +84,7 @@ class Genetic:
         ax.grid(True)
         ax.legend()
         plt.show()
+
 
     @staticmethod
     def print_performace(performance: list):
@@ -288,6 +289,7 @@ class Genetic:
                 score_median
 
             ])
+
             if self.fitness_minimize:
                 if self.fitness_function(best_chromosome) == 0:
                     break

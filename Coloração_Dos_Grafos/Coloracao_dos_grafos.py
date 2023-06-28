@@ -58,7 +58,7 @@ def printResults(results):
 # ----------------------main--------------------------
 
 colors = ["red", "blue", "green", "yellow"]
-graph_points = [str(i) for i in range(1, 500)]
+graph_points = [str(i) for i in range(1, 10)]
 graph_Arest = generate_graph(len(graph_points))
 
 graph_Arest_easy = [[7, 6, 2],  # A
@@ -85,7 +85,7 @@ graph_Arest_easy = [[7, 6, 2],  # A
 
 population = Genetic(chromosome_size=len(graph_points),
                      genes_number=4,
-                     population_size=500,
+                     population_size=100,
                      generations=400,
                      fitness_function=fitness_function,
                      fitness_minimize=True,
