@@ -56,9 +56,9 @@ def printResults(results):
 
 
 # ----------------------main--------------------------
-
+#[1, 2, 3 ]
 colors = ["red", "blue", "green", "yellow"]
-graph_points = [str(i) for i in range(1, 10)]
+graph_points = [str(i) for i in range(1, 40)]
 graph_Arest = generate_graph(len(graph_points))
 
 graph_Arest_easy = [[7, 6, 2],  # A
@@ -85,11 +85,12 @@ graph_Arest_easy = [[7, 6, 2],  # A
 
 population = Genetic(chromosome_size=len(graph_points),
                      genes_number=4,
-                     population_size=100,
+                     population_size=50,
                      generations=400,
                      fitness_function=fitness_function,
                      fitness_minimize=True,
                      num_elites=10,
+                     mutation_prob=0.01,
                      )
 
 results, performance = population.run()  # executa o algoritmo genetico
@@ -99,6 +100,7 @@ graph = pg.Graph("Coloração de Grafos - melhor resultado", graph_points, graph
 
 # imprime o melhor resultado
 print("Melhor Resultado: ")
+print("Número de gerações: ", len(results))
 print("Chromosome: ", results[-1][0])
 print("Fitness: ", results[-1][1])
 

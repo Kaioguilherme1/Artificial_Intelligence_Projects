@@ -85,7 +85,6 @@ class Genetic:
         ax.legend()
         plt.show()
 
-
     @staticmethod
     def print_performace(performance: list):
         print("+-------------+--------------+-----------------+----------------+")
